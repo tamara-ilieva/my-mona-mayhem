@@ -9,10 +9,12 @@ This repository contains an Astro application. Pages and API routes use Astro's 
 - `npm install` installs dependencies.
 - `npm run dev` starts the local development server.
 - `npm run build` creates a production build.
+- `npm run lint` checks JavaScript, TypeScript, and Astro files with ESLint.
+- `npm run lint:fix` applies automatic ESLint fixes.
 - `npm run preview` serves the production build locally.
 - `npm run astro -- <args>` runs the Astro CLI.
 
-There are currently no test or lint scripts in `package.json`.
+There is currently no test script in `package.json`. Run lint and build after code changes.
 
 ## Astro Guidance
 

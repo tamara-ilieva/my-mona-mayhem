@@ -62,6 +62,16 @@ The workshop supports two tracks — follow the one that matches your preferred 
 - **Font**: Press Start 2P (retro gaming font)
 - **API**: GitHub's contribution graph API
 
+## Code Quality
+
+Run `npm run lint` to check JavaScript, TypeScript, and Astro files, or
+`npm run lint:fix` to apply automatic fixes. Linting rejects unused variables,
+parameters, and caught errors, and enforces single quotes, semicolons, trailing
+commas in multiline lists, and braces around control-flow bodies. Build output
+and generated Astro files are excluded.
+
+Run `npm run lint` and `npm run build` before submitting code changes.
+
 ## Deployment Notes
 
 ### Current GitHub Pages setup

@@ -1,3 +1,4 @@
+/* exported toggleTheme */
 (function() {
     const saved = localStorage.getItem('theme');
     if (saved) {
@@ -16,7 +17,9 @@ function toggleTheme() {
 
 function updateToggleIcon() {
     const btn = document.querySelector('.theme-toggle');
-    if (!btn) return;
+    if (!btn) {
+        return;
+    }
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     btn.innerHTML = isLight ? '🌙 Dark' : '☀️ Light';
 }
