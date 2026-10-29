@@ -11,7 +11,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mona Mayhem Workshop</title>
+    <title>Taller de Mona Mayhem</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -29,14 +29,14 @@
         <div class="header-content">
             <a href="index.html" class="header-brand">
                 <span class="header-icon">🎮</span>
-                <span class="header-title">Mona Mayhem Workshop</span>
+                <span class="header-title">Taller de Mona Mayhem</span>
             </a>
             <div class="header-nav">
-                <div class="track-toggle" role="tablist" aria-label="Workshop track toggle">
+                <div class="track-toggle" role="tablist" aria-label="Alternar itinerario del taller">
                     <button class="track-btn active" data-track="vscode" type="button">VS Code</button>
                     <button class="track-btn" data-track="cli" type="button">CLI</button>
                 </div>
-                <span class="track-indicator" id="trackIndicator">Pista VS Code</span>
+                <span class="track-indicator" id="trackIndicator">Itinerario de VS Code</span>
                 <div class="locale-picker" id="localePicker">
                     <button type="button" class="locale-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="Seleccionar idioma">🌐</button>
                     <ul role="listbox" aria-label="Idioma">
@@ -56,7 +56,7 @@
     <div class="layout">
         <aside class="sidebar">
             <div class="sidebar-section">
-                <div class="sidebar-title">Etapas del Taller</div>
+                <div class="sidebar-title">Pasos del taller</div>
                 <nav id="stepNav"></nav>
             </div>
         </aside>
@@ -76,22 +76,22 @@
         const TRACKS = {
             vscode: {
                 label: 'VS Code',
-                indicator: 'Pista VS Code'
+                indicator: 'Itinerario de VS Code'
             },
             cli: {
                 label: 'CLI',
-                indicator: 'Pista CLI'
+                indicator: 'Itinerario de la CLI'
             }
         };
 
         const steps = [
-            { id: '00-overview', file: '00-overview.md', title: 'Visión General', number: '00' },
-            { id: '01-setup', file: '01-setup.md', title: 'Configuración e Ingeniería de Contexto', number: '01' },
-            { id: '02-plan-and-scaffold', file: '02-plan-and-scaffold.md', title: 'Planificar y Estructurar', number: '02' },
-            { id: '03-agent-mode', file: '03-agent-mode.md', title: 'Construir el Juego', number: '03' },
+            { id: '00-overview', file: '00-overview.md', title: 'Visión general', number: '00' },
+            { id: '01-setup', file: '01-setup.md', title: 'Configuración e ingeniería de contexto', number: '01' },
+            { id: '02-plan-and-scaffold', file: '02-plan-and-scaffold.md', title: 'Planificar y estructurar', number: '02' },
+            { id: '03-agent-mode', file: '03-agent-mode.md', title: 'Construir el juego', number: '03' },
             { id: '04-design-vibes', file: '04-design-vibes.md', title: 'Temas Design-First', number: '04' },
-            { id: '05-polish', file: '05-polish.md', title: 'Pulido y Trabajo Paralelo', number: '05' },
-            { id: '06-bonus', file: '06-bonus.md', title: 'Bonus y Extensiones', number: '🎉' },
+            { id: '05-polish', file: '05-polish.md', title: 'Pulido y trabajo en paralelo', number: '05' },
+            { id: '06-bonus', file: '06-bonus.md', title: 'Bonus y extensiones', number: '🎉' },
         ];
 
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
@@ -362,7 +362,7 @@
                         updateCopyButtonState(copyButton, '¡Copiado!', 'is-copied', 'Bloque de código copiado');
                     } catch (error) {
                         console.error('Failed to copy code to clipboard:', error);
-                        updateCopyButtonState(copyButton, 'Falló', 'is-error', 'Error al copiar bloque de código');
+                        updateCopyButtonState(copyButton, 'Falló', 'is-error', 'Error al copiar el bloque de código');
                     }
                 });
 
@@ -385,7 +385,7 @@
             buildSidebar();
             updateNavButtons();
             buildFooterNav();
-            document.title = `${step.title} - Mona Mayhem Workshop (${TRACKS[currentTrack].label})`;
+            document.title = `${step.title} - Taller de Mona Mayhem (${TRACKS[currentTrack].label})`;
 
             const contentEl = document.getElementById('markdownContent');
             contentEl.innerHTML = '<div class="loading">Cargando contenido</div>';
@@ -412,7 +412,7 @@
                 contentEl.innerHTML = `
                     <div class="markdown">
                         <h1>${step.title}</h1>
-                        <p>No se pudo cargar el contenido. Por favor, consulte el <a href="https://github.com/copilot-dev-days/mona-mayhem" target="_blank">repositorio de GitHub</a> directamente.</p>
+                        <p>No se pudo cargar el contenido. Consulta directamente el <a href="https://github.com/copilot-dev-days/mona-mayhem" target="_blank">repositorio de GitHub</a>.</p>
                         <p style="color: var(--text-secondary); font-size: 0.875rem;">Error: ${err.message}</p>
                     </div>`;
             }
