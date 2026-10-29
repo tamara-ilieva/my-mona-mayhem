@@ -1,0 +1,933 @@
+---
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+	<title>Mona Mayhem - Battle Arena</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Arial', sans-serif;
+			background: #000033;
+			color: #ffff00;
+			min-height: 100vh;
+			padding: 20px;
+			overflow-x: hidden;
+		}
+
+		header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+
+		h1 {
+			font-size: clamp(2rem, 8vw, 4rem);
+			text-transform: uppercase;
+			font-weight: bold;
+			letter-spacing: 2px;
+			margin-bottom: 10px;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+			animation: pacmanBounce 1s ease-in-out infinite;
+		}
+
+		header p {
+			font-size: 1.2rem;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			color: #00ffff;
+			text-shadow: 1px 1px 0 #333;
+			margin-bottom: 20px;
+		}
+
+		.nav-buttons {
+			display: flex;
+			gap: 10px;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		.nav-btn {
+			padding: 8px 20px;
+			font-size: 0.9rem;
+			text-transform: uppercase;
+			background: #001a4d;
+			border: 2px solid #00ffff;
+			color: #00ffff;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			font-family: 'Arial', sans-serif;
+		}
+
+		.nav-btn:hover {
+			background: #002d7a;
+			transform: scale(1.05);
+		}
+
+		.nav-btn.active {
+			background: #ffff00;
+			color: #000033;
+			border-color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		.setup-section {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			margin-bottom: 40px;
+			border: 3px solid #ffff00;
+			padding: 30px;
+			background: #001a4d;
+		}
+
+		.player-list {
+			border: 2px solid #00ffff;
+			padding: 20px;
+			background: #000066;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+
+		.player-list h3 {
+			text-transform: uppercase;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+			margin-bottom: 15px;
+			letter-spacing: 1px;
+		}
+
+		.player-input-row {
+			display: flex;
+			gap: 10px;
+			margin-bottom: 10px;
+		}
+
+		.player-input-row input {
+			flex: 1;
+			padding: 10px 15px;
+			font-size: 1rem;
+			font-family: 'Arial', sans-serif;
+			background: #000066;
+			border: 2px solid #00ffff;
+			color: #ffff00;
+			text-transform: lowercase;
+			transition: all 0.2s ease;
+			outline: none;
+		}
+
+		.player-input-row input:focus {
+			background: #000099;
+			border-color: #ffff00;
+			transform: scale(1.02);
+		}
+
+		.player-input-row button {
+			padding: 10px 20px;
+			font-size: 0.9rem;
+			text-transform: uppercase;
+			background: #ff0000;
+			border: 2px solid #ff0000;
+			color: #ffff00;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			font-family: 'Arial', sans-serif;
+		}
+
+		.player-input-row button:hover {
+			background: #cc0000;
+			transform: scale(1.05);
+		}
+
+		.players-display {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+		}
+
+		.player-badge {
+			background: linear-gradient(90deg, #00ffff, #ff00ff);
+			color: #000033;
+			padding: 8px 15px;
+			border-radius: 5px;
+			font-weight: bold;
+			text-transform: uppercase;
+			font-size: 0.9rem;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.player-badge button {
+			background: rgba(0, 0, 51, 0.5);
+			border: none;
+			color: #000033;
+			cursor: pointer;
+			padding: 0 5px;
+			font-size: 0.8rem;
+			transition: all 0.2s ease;
+		}
+
+		.player-badge button:hover {
+			background: rgba(0, 0, 51, 0.8);
+		}
+
+		.add-player-input {
+			display: flex;
+			gap: 10px;
+		}
+
+		.add-player-input input {
+			flex: 1;
+			padding: 12px 15px;
+			font-size: 1rem;
+			font-family: 'Arial', sans-serif;
+			background: #000066;
+			border: 2px solid #00ffff;
+			color: #ffff00;
+			text-transform: lowercase;
+			outline: none;
+		}
+
+		.add-player-input input:focus {
+			background: #000099;
+			border-color: #ffff00;
+		}
+
+		.add-player-input input::placeholder {
+			color: #0099ff;
+		}
+
+		.add-player-input button {
+			padding: 12px 30px;
+			font-size: 1rem;
+			font-weight: bold;
+			text-transform: uppercase;
+			background: linear-gradient(90deg, #00ffff, #00ffff);
+			color: #000033;
+			border: 2px solid #00ffff;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			font-family: 'Arial', sans-serif;
+		}
+
+		.add-player-input button:hover:not(:disabled) {
+			transform: scale(1.05);
+		}
+
+		.add-player-input button:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		.button-group {
+			display: flex;
+			gap: 10px;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		button {
+			padding: 15px 40px;
+			font-size: 1.2rem;
+			font-weight: bold;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			background: linear-gradient(90deg, #ffff00, #ff00ff);
+			color: #000033;
+			border: 2px solid #ffff00;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			font-family: 'Arial', sans-serif;
+		}
+
+		button:hover:not(:disabled) {
+			transform: scale(1.05);
+			background: linear-gradient(90deg, #ffff00, #ffff00);
+		}
+
+		button:active:not(:disabled) {
+			transform: scale(0.98);
+		}
+
+		button:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		#loading {
+			text-align: center;
+			font-size: 1.5rem;
+			padding: 40px;
+		}
+
+		.loader {
+			display: inline-block;
+			width: 60px;
+			height: 60px;
+			animation: pacmanEat 0.6s ease-in-out infinite;
+		}
+
+		.loader::before {
+			content: '';
+			display: block;
+			width: 100%;
+			height: 100%;
+			background: #ffff00;
+			border-radius: 50%;
+			clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+		}
+
+		.loading-text {
+			margin-top: 20px;
+			text-transform: uppercase;
+			text-shadow: 1px 1px 0 #333;
+			animation: pulse 1.5s ease-in-out infinite;
+			letter-spacing: 2px;
+		}
+
+		#error {
+			background: rgba(255, 0, 0, 0.2);
+			border: 2px solid #ff0000;
+			border-radius: 5px;
+			padding: 20px;
+			text-align: center;
+			font-size: 1.1rem;
+			color: #ff0000;
+			text-shadow: 1px 1px 0 #333;
+			animation: slideInUp 0.3s ease-out;
+		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		#results {
+			animation: slideInUp 0.8s ease-out;
+		}
+
+		.leaderboard {
+			border: 3px solid #ffff00;
+			padding: 30px;
+			background: #001a4d;
+		}
+
+		.leaderboard h2 {
+			font-size: 2rem;
+			text-transform: uppercase;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+			margin-bottom: 30px;
+			text-align: center;
+			letter-spacing: 2px;
+		}
+
+		.leaderboard-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.leaderboard-table th {
+			background: #000066;
+			color: #ffff00;
+			padding: 15px;
+			text-align: left;
+			text-transform: uppercase;
+			border: 2px solid #00ffff;
+			font-size: 1.1rem;
+		}
+
+		.leaderboard-table td {
+			padding: 15px;
+			border: 2px solid #00ffff;
+			color: #00ffff;
+			text-shadow: 1px 1px 0 #333;
+		}
+
+		.leaderboard-table tbody tr {
+			opacity: 0;
+			animation: slideInLeft 0.6s ease-out forwards;
+		}
+
+		.leaderboard-table tbody tr:nth-child(1) {
+			animation-delay: 0.1s;
+			background: rgba(255, 215, 0, 0.1);
+		}
+
+		.leaderboard-table tbody tr:nth-child(2) {
+			animation-delay: 0.25s;
+			background: rgba(192, 192, 192, 0.1);
+		}
+
+		.leaderboard-table tbody tr:nth-child(3) {
+			animation-delay: 0.4s;
+			background: rgba(205, 127, 50, 0.1);
+		}
+
+		.leaderboard-table tbody tr:nth-child(n+4) {
+			animation-delay: calc(0.4s + (var(--row-index) * 0.1s));
+			background: rgba(0, 51, 102, 0.3);
+		}
+
+		.rank {
+			font-weight: bold;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+			font-size: 1.2rem;
+			animation: pacmanBounce 1s ease-in-out infinite;
+		}
+
+		.rank-medal {
+			display: inline-block;
+			margin-right: 5px;
+			font-size: 1.5rem;
+		}
+
+		.player-name {
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+
+		.stat {
+			text-align: right;
+			font-family: monospace;
+			font-weight: bold;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+		}
+
+		.graphs-section {
+			border: 3px solid #ffff00;
+			padding: 30px;
+			background: #001a4d;
+			margin-top: 30px;
+		}
+
+		.graphs-section h2 {
+			font-size: 2rem;
+			text-transform: uppercase;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+			margin-bottom: 30px;
+			text-align: center;
+			letter-spacing: 2px;
+		}
+
+		.graphs-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+			gap: 30px;
+			margin-bottom: 40px;
+		}
+
+		.graph {
+			background: linear-gradient(135deg, #000066 0%, #330033 100%);
+			border: 2px solid #00ffff;
+			border-radius: 5px;
+			padding: 20px;
+			animation: slideInUp 0.8s ease-out forwards;
+			opacity: 0;
+		}
+
+		.graph:nth-child(1) { animation-delay: 0.2s; }
+		.graph:nth-child(2) { animation-delay: 0.3s; }
+		.graph:nth-child(3) { animation-delay: 0.4s; }
+		.graph:nth-child(4) { animation-delay: 0.5s; }
+		.graph:nth-child(5) { animation-delay: 0.6s; }
+		.graph:nth-child(n+6) { animation-delay: 0.7s; }
+
+		.graph h4 {
+			font-size: 1.2rem;
+			text-transform: uppercase;
+			color: #ffff00;
+			text-shadow: 1px 1px 0 #333;
+			margin-bottom: 15px;
+			text-align: center;
+			letter-spacing: 1px;
+		}
+
+		canvas {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+
+		@keyframes pacmanBounce {
+			0%, 100% { transform: translateY(0); }
+			50% { transform: translateY(-15px); }
+		}
+
+		@keyframes pacmanEat {
+			0%, 100% { clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); }
+			50% { clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%); }
+		}
+
+		@keyframes slideInUp {
+			from { opacity: 0; transform: translateY(30px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		@keyframes pulse {
+			0%, 100% { opacity: 0.7; }
+			50% { opacity: 1; }
+		}
+
+		@media (max-width: 768px) {
+			.leaderboard-table th,
+			.leaderboard-table td {
+				padding: 10px;
+				font-size: 0.9rem;
+			}
+
+			.player-input-row {
+				flex-direction: column;
+			}
+
+			.add-player-input {
+				flex-direction: column;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header>
+			<h1>MONA MAYHEM</h1>
+			<p>N-Player Battle Arena</p>
+			<div class="nav-buttons">
+				<button class="nav-btn active" onclick="location.href='/'">1v1 Battle</button>
+				<button class="nav-btn active" onclick="location.href='/battle'">N-Player</button>
+			</div>
+		</header>
+
+		<div class="setup-section">
+			<div class="player-list">
+				<h3>Players</h3>
+				<div class="players-display" id="playersList">
+					<p style="color: #0099ff; font-style: italic;">No players added yet</p>
+				</div>
+			</div>
+
+			<div class="add-player-input">
+				<input type="text" id="playerInput" placeholder="Enter username" />
+				<button id="addBtn">Add Player</button>
+			</div>
+
+			<div class="button-group">
+				<button id="battle-btn">Battle!</button>
+			</div>
+
+			<div id="loading" class="hidden">
+				<div class="loader"></div>
+				<div class="loading-text">Battling...</div>
+			</div>
+
+			<div id="error" class="hidden"></div>
+		</div>
+
+		<section id="results" class="hidden">
+			<div class="leaderboard">
+				<h2>Battle Results</h2>
+				<table class="leaderboard-table">
+					<thead>
+						<tr>
+							<th>Rank</th>
+							<th>Player</th>
+							<th>Total Contributions</th>
+							<th>Avg/Week</th>
+							<th>Best Week</th>
+						</tr>
+					</thead>
+					<tbody id="resultsBody"></tbody>
+				</table>
+			</div>
+
+			<div class="graphs-section">
+				<h2>Contribution Graphs</h2>
+				<div class="graphs-grid" id="graphsGrid"></div>
+			</div>
+
+			<div class="button-group" style="margin-top: 40px;">
+				<button id="new-battle-btn" onclick="location.reload()">New Battle</button>
+				<button id="back-btn" onclick="location.href='/'">Back to 1v1</button>
+			</div>
+		</section>
+	</div>
+
+	<canvas id="particle-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none;"></canvas>
+
+	<script>
+		const PARTICLE_CANVAS = document.getElementById('particle-canvas');
+		const PARTICLE_CTX = PARTICLE_CANVAS.getContext('2d');
+		let particles = [];
+		let players = [];
+
+		PARTICLE_CANVAS.width = window.innerWidth;
+		PARTICLE_CANVAS.height = window.innerHeight;
+
+		window.addEventListener('resize', () => {
+			PARTICLE_CANVAS.width = window.innerWidth;
+			PARTICLE_CANVAS.height = window.innerHeight;
+		});
+
+		// Pellet class
+		class Pellet {
+			constructor(x, y, vx, vy, color, life = 1.5) {
+				this.x = x;
+				this.y = y;
+				this.vx = vx;
+				this.vy = vy;
+				this.color = color;
+				this.life = life;
+				this.maxLife = life;
+				this.size = Math.random() * 3 + 2;
+			}
+
+			update() {
+				this.x += this.vx;
+				this.y += this.vy;
+				this.vy += 0.1;
+				this.life -= 1 / 60;
+			}
+
+			draw(ctx) {
+				ctx.save();
+				ctx.globalAlpha = Math.max(0, this.life / this.maxLife);
+				ctx.fillStyle = this.color;
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.restore();
+			}
+		}
+
+		function createPellets(x, y, count = 20) {
+			const colors = ['#ffff00', '#ff00ff', '#00ffff'];
+			for (let i = 0; i < count; i++) {
+				const angle = (Math.PI * 2 * i) / count;
+				const velocity = 4 + Math.random() * 3;
+				particles.push(
+					new Pellet(
+						x,
+						y,
+						Math.cos(angle) * velocity,
+						Math.sin(angle) * velocity - 3,
+						colors[Math.floor(Math.random() * colors.length)],
+						1.5,
+					),
+				);
+			}
+		}
+
+		function updateParticles() {
+			particles = particles.filter(p => p.life > 0);
+			particles.forEach(p => p.update());
+		}
+
+		function drawParticles() {
+			particles.forEach(p => p.draw(PARTICLE_CTX));
+		}
+
+		function animateParticles() {
+			PARTICLE_CTX.clearRect(0, 0, PARTICLE_CANVAS.width, PARTICLE_CANVAS.height);
+			updateParticles();
+			drawParticles();
+			if (particles.length > 0) {
+				requestAnimationFrame(animateParticles);
+			}
+		}
+
+		// Player management
+		function renderPlayers() {
+			const list = document.getElementById('playersList');
+			if (players.length === 0) {
+				list.innerHTML = '<p style="color: #0099ff; font-style: italic;">No players added yet</p>';
+				return;
+			}
+
+			list.innerHTML = players.map((p, idx) => `
+				<div class="player-badge">
+					<span>${p}</span>
+					<button class="remove-player" data-index="${idx}">x</button>
+				</div>
+			`).join('');
+
+			list.querySelectorAll('.remove-player').forEach(btn => {
+				btn.addEventListener('click', () => {
+					removePlayer(parseInt(btn.dataset.index));
+				});
+			});
+		}
+
+		function addPlayer() {
+			const input = document.getElementById('playerInput');
+			const username = input.value.trim().toLowerCase();
+
+			if (!username) {
+				showError('Enter a username');
+				return;
+			}
+
+			if (players.some(p => p === username)) {
+				showError('Player already added');
+				return;
+			}
+
+			if (players.length >= 12) {
+				showError('Maximum 12 players');
+				return;
+			}
+
+			players.push(username);
+			input.value = '';
+			renderPlayers();
+			document.getElementById('error').classList.add('hidden');
+		}
+
+		function removePlayer(idx) {
+			players.splice(idx, 1);
+			renderPlayers();
+		}
+
+		async function executeBattle() {
+			if (players.length < 2) {
+				showError('Add at least 2 players');
+				return;
+			}
+
+			document.getElementById('loading').classList.remove('hidden');
+			document.getElementById('error').classList.add('hidden');
+
+			try {
+				// Fetch all players concurrently
+				const responses = await Promise.all(
+					players.map(p => fetch(`/api/contributions/${p}`))
+				);
+
+				// Check for errors
+				for (let i = 0; i < responses.length; i++) {
+					if (!responses[i].ok) {
+						const error = await responses[i].json();
+						throw new Error(`${players[i]}: ${error.message}`);
+					}
+				}
+
+				// Parse all data
+				const data = await Promise.all(responses.map(r => r.json()));
+
+				// Calculate stats for each player
+				const results = data.map((d, idx) => ({
+					player: players[idx],
+					total: d.total_contributions || 0,
+					from: d.from || '?',
+					to: d.to || '?',
+					weeks: (d.weeks || []).length,
+					avg: Math.round((d.total_contributions || 0) / Math.max(1, (d.weeks || []).length)),
+					best: Math.max(...(d.weeks || []).flatMap(w => (w.contribution_days || []).map(d => d.count || 0)), 0),
+				}));
+
+				// Sort by total contributions
+				results.sort((a, b) => b.total - a.total);
+
+				// Hide loading and show results
+				document.getElementById('loading').classList.add('hidden');
+				displayResults(results, data);
+
+				// Particle burst
+				createPellets(window.innerWidth / 2, window.innerHeight / 3, 20);
+				animateParticles();
+			} catch (error) {
+				document.getElementById('loading').classList.add('hidden');
+				showError(error.message);
+			}
+		}
+
+		function showError(message) {
+			const errorEl = document.getElementById('error');
+			errorEl.textContent = message;
+			errorEl.classList.remove('hidden');
+		}
+
+		// Number count-up animation
+		function animateNumber(element, target, duration = 800) {
+			const increment = target / (duration / 16);
+			let current = 0;
+
+			const interval = setInterval(() => {
+				current += increment;
+				if (current >= target) {
+					current = target;
+					clearInterval(interval);
+				}
+				element.textContent = Math.round(current).toLocaleString();
+			}, 16);
+		}
+
+		// Graph rendering function
+		function drawContributionGraph(canvas, data, playerName) {
+			const ctx = canvas.getContext('2d');
+			const weeks = data.weeks || [];
+
+			canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+			canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+			ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+			const width = canvas.width / window.devicePixelRatio;
+			const height = canvas.height / window.devicePixelRatio;
+
+			const maxWeeks = 52;
+			const displayWeeks = Math.min(weeks.length, maxWeeks);
+			const barWidth = (width - 40) / displayWeeks;
+			const barHeight = height - 40;
+
+			const maxContributions = Math.max(
+				...weeks.flatMap(w => w.contribution_days || []).map(d => d.count || 0),
+				1,
+			);
+
+			const pacmanColors = ['#001a4d', '#0066ff', '#00ccff', '#ffff00'];
+
+			let delay = 0;
+			weeks.slice(-displayWeeks).forEach((week, idx) => {
+				const totalWeekContributions = (week.contribution_days || []).reduce(
+					(sum, day) => sum + (day.count || 0),
+					0,
+				);
+				const level = Math.min(3, Math.floor((totalWeekContributions / maxContributions) * 3));
+				const color = pacmanColors[level];
+
+				setTimeout(() => {
+					const x = 20 + idx * barWidth + barWidth * 0.1;
+					const y = 20 + barHeight * (1 - totalWeekContributions / maxContributions);
+					const w = barWidth * 0.8;
+					const h = barHeight * (totalWeekContributions / maxContributions);
+
+					ctx.fillStyle = color;
+					ctx.fillRect(x, y, w, h);
+					ctx.strokeStyle = '#00ffff';
+					ctx.lineWidth = 1;
+					ctx.strokeRect(x, y, w, h);
+				}, delay);
+
+				delay += 20;
+			});
+		}
+
+		function displayResults(results, rawData) {
+			const tbody = document.getElementById('resultsBody');
+			
+			// Get medal emojis for top 3
+			const medals = ['🥇', '🥈', '🥉'];
+			
+			tbody.innerHTML = results.map((r, idx) => {
+				const medal = idx < 3 ? medals[idx] : '';
+				const displayIdx = idx + 1;
+				return `
+					<tr>
+						<td class="rank">
+							${medal ? `<span class="rank-medal">${medal}</span>` : ''}
+							<span class="rank-number">${displayIdx}</span>
+						</td>
+						<td class="player-name">${r.player}</td>
+						<td class="stat"><span class="stat-total" data-value="${r.total}">0</span></td>
+						<td class="stat"><span class="stat-avg" data-value="${r.avg}">0</span></td>
+						<td class="stat"><span class="stat-best" data-value="${r.best}">0</span></td>
+					</tr>
+				`;
+			}).join('');
+
+			document.getElementById('results').classList.remove('hidden');
+
+			// Create graphs HTML
+			const graphsGrid = document.getElementById('graphsGrid');
+			const playerDataMap = {};
+			rawData.forEach((data, idx) => {
+				playerDataMap[results[idx].player] = data;
+			});
+
+			graphsGrid.innerHTML = results.map(r => `
+				<div class="graph">
+					<h4>${r.player.toUpperCase()} - Contributions</h4>
+					<canvas class="player-graph" data-player="${r.player}"></canvas>
+				</div>
+			`).join('');
+
+			// Animate all numbers with staggered timing
+			setTimeout(() => {
+				const statTotals = document.querySelectorAll('.stat-total');
+				const statAvgs = document.querySelectorAll('.stat-avg');
+				const statBests = document.querySelectorAll('.stat-best');
+
+				let delay = 0;
+				statTotals.forEach((el, idx) => {
+					setTimeout(() => {
+						const value = parseInt(el.dataset.value);
+						animateNumber(el, value, 600);
+					}, delay);
+					delay += 100;
+				});
+
+				delay = 0;
+				statAvgs.forEach((el, idx) => {
+					setTimeout(() => {
+						const value = parseInt(el.dataset.value);
+						animateNumber(el, value, 600);
+					}, delay + 300);
+					delay += 100;
+				});
+
+				delay = 0;
+				statBests.forEach((el, idx) => {
+					setTimeout(() => {
+						const value = parseInt(el.dataset.value);
+						animateNumber(el, value, 600);
+					}, delay + 600);
+					delay += 100;
+				});
+			}, 100);
+
+			// Draw graphs with staggered timing
+			setTimeout(() => {
+				let graphDelay = 0;
+				document.querySelectorAll('.player-graph').forEach(canvas => {
+					const playerName = canvas.dataset.player;
+					const data = playerDataMap[playerName];
+					if (data) {
+						setTimeout(() => {
+							drawContributionGraph(canvas, data, playerName);
+						}, graphDelay);
+						graphDelay += 200;
+					}
+				});
+			}, 800);
+		}
+
+		// Event listeners
+		document.getElementById('addBtn').addEventListener('click', addPlayer);
+		document.getElementById('playerInput').addEventListener('keypress', e => {
+			if (e.key === 'Enter') addPlayer();
+		});
+		document.getElementById('battle-btn').addEventListener('click', executeBattle);
+
+		// Auto-focus
+		window.addEventListener('load', () => {
+			document.getElementById('playerInput').focus();
+		});
+	</script>
+</body>
+</html>
